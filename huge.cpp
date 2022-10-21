@@ -5,6 +5,8 @@
 #include <string.h>
 #include <sys/mman.h>
 
+#define SIZE 1500*1024
+
 
 int main(int argc, char** argv){
     std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -21,7 +23,7 @@ int main(int argc, char** argv){
     if (argc == 1){
         // use 4k page size if no additional args
         std::cout << "Page size: 4k\n";
-        addr = 0; // TODO
+        addr = mmap(nullptr, SIZE, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS , -1, 0); // TODO
     }
     else{
         // use 2MB page size if additional args
@@ -36,7 +38,7 @@ int main(int argc, char** argv){
         // If you want to learn more about this special setup, check out 
         // https://docs.kernel.org/admin-guide/mm/hugetlbpage.html
         std::cout << "Page size: 2MB\n";
-        addr = 0; // TODO 
+        addr = mmap(nullptr, SIZE, PROT_READ, MAP_PRIVATE | MAP_HUGETLB | MAP_ANONYMOUS , -1, 0); // TODO 
     }
 
     // Always check your return values!
@@ -48,6 +50,10 @@ int main(int argc, char** argv){
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
+
+    for(int i=0;i<SIZE;i+=4096){
+        ((char*)addr)[i];
+    }
 
 
     std::time_t end_time = std::chrono::system_clock::to_time_t(end);

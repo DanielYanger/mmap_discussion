@@ -1,6 +1,21 @@
+Our group:
+
+dayang
+aswad2
+abhatia
+bowenyin
+
+
 - How did you design your benchmarks?
 
+We binary searched on the size to read in for all of the benchmarks. 
+We used binary search since we knew that there existed a point where one would be faster than the other and we needed to find it.
+We tried a large file and then a small file but both favored the same type. Thus we knew to try the middle.
+
+
 - What performance differences did you see?
+
+We saw that demand paging and 4kb only is favored in extreme file sizes (both large and small).
 
 - If you have time / interest, lets try to look at what exactly caused these
 performance differences above. Our hardware has special performance counters
@@ -9,3 +24,5 @@ instruction, etc. We can use these counters ourselves using the perf
 commandline tool. `perf list` will print a list of all the counters your
 hardware + OS support. Which counters did you find most interesting? What
 results did you observe?
+
+Unfortunately we did not have the time nor interest in doing so. Our binary search technique was too slow so we think we need to optimize our ML model.

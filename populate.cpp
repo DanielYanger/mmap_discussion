@@ -5,6 +5,8 @@
 #include <string.h>
 #include <sys/mman.h>
 
+#define SIZE 20000
+
 int main(int argc, char** argv){
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
@@ -20,7 +22,7 @@ int main(int argc, char** argv){
     // this file descriptor, the OS knows which file you actually wanted to
     // read / write / mmap
 
-    int fd = open("data", O_RDWR);
+    int fd = open("tiny.txt", O_RDWR);
 
     void* addr;
 
@@ -28,12 +30,13 @@ int main(int argc, char** argv){
     if (argc == 1){
         // do demand paging if no additional args
         printf("Demand paging\n");
-        addr = 0; // TODO
+        addr = mmap(nullptr, SIZE, PROT_READ, MAP_PRIVATE, fd, 0); // TODO
     }
     else{
         // load all at once if additional args
         printf("Map populate\n");
-        addr = 0; // TODO 
+        addr = mmap(nullptr, SIZE, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0); // TODO
+
     }
 
     // Always check your return values!
@@ -46,6 +49,11 @@ int main(int argc, char** argv){
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
 
+    
+
+    for(int i=0;i<SIZE;i+=4096){
+        ((char*)addr)[i];
+    }
 
     std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
