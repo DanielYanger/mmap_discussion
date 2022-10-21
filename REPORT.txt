@@ -8,6 +8,12 @@ bowenyin
 
 - How did you design your benchmarks?
 
+For the demand paging case, we essentially wanted to maximize the number of accesses that would trigger the page fault handler. This way,
+demand paging would have to go through the page fault handling process many times, while the already allocated mmap call could simply
+read each time.
+For the difference in page sizes, our goal was to make a file size that was in between 4kb and 2MB. This way, when reading, the 2MB page would
+only trigger the page fault handler once, but the 4kb pages would trigger it multiple times since the data was spread across multiple pages.
+
 We binary searched on the size to read in for all of the benchmarks. 
 We used binary search since we knew that there existed a point where one would be faster than the other and we needed to find it.
 We tried a large file and then a small file but both favored the same type. Thus we knew to try the middle.
